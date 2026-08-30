@@ -1,4 +1,4 @@
-package com.ehan.kalkulator.ui.theme
+package com.ehan.app2.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
