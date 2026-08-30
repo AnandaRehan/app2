@@ -10,6 +10,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import kotlinx.coroutines.flow.first
 /**
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 */
@@ -61,9 +63,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val dataStoreManager = DataStoreManager(this)
         setContent {
             App2Theme {
                 greeting(
+                    viewModel = SettingsViewModel(dataStoreManager).
                     onCheatDetected = {
                             Toast.makeText(this, "⚠️ Deteksi Manipulasi Memori!", Toast.LENGTH_SHORT).show()
                     }
@@ -72,13 +76,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun greeting(
-    //modifier: Modifier = Modifier,
-    onCheatDetected: () -> Unit
-) {
-    var _angka_1: Int by remember { mutableStateOf(10) }
+/**
+    Toast.makeText(this, "refresh", Toast.LENGTH_SHORT).show()
+    var _angka_1: Int by rememberSaveable { mutableStateOf(10) }
 
     var angka_1: Int by remember { mutableStateOf(10) }
 
@@ -115,27 +115,41 @@ fun greeting(
         Button(
             onClick = {
                 // Jalur resmi: Ubah nilai asli dulu, baru update tampilan
-                _angka_1 += 7 
+                _angka_1 += 7
+                angka_1 = _angka_1
                 angka_1 = _angka_1
             }
         ) {
             Text("Tambah Koin (+7)")
         }
     }
+*/
 
-    /**
+@Composable
+fun greeting(
+    //modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel,
+    onCheatDetected: () -> Unit
+) {
+    Toast.makeText(this, "refresh 1", Toast.LENGTH_SHORT).show()
+    val angka_1: Int by viewModel.angka_1.collectAsState()
+    val userName: String by viewModel.userName.collectAsState()
+
+  //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .padding(16.dp)
     ) {
-        Text(text = "Angka Saat Ini " + angka_1.toString())
+        Toast.makeText(this, "refresh 2", Toast.LENGTH_SHORT).show()
+        Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
                 angka_1++
             }
         ) {
+            Toast.makeText(this, "refresh 3", Toast.LENGTH_SHORT).show()
             Text(
                 text = "Tambah 1"
             )
@@ -149,30 +163,16 @@ fun greeting(
                 text = "Kurang 1"
             )
         }
-        Text(
-            text = ""
+        OutlinedTextField(
+            value = userName,
+            onValueChange = { viewModel.saveUserName(it) },
+            label = { Text("Nama") },
+            modifier = Modifier.fillMaxWidth()
         )
-    }*/
+
+        Text(
+            text = "Halo, ${userName.ifEmpty { "Guest" }}!",
+            style = MaterialTheme.typography.headlineMedium
+        )
+    }
 }
-/**
-class UserPreferences(private val dataStore: DataStore<Preferences>) {
-
-    companion object {
-        // 2. Tentukan Key unik beserta tipe datanya (stringPreferencesKey, intPreferencesKey, dll.)
-        private val ANGKA_1_KEY = intPreferencesKey("data1")
-    }
-
-    // 3. Membaca Data (Mengembalikan data dalam bentuk Flow secara reactive)
-    val ANGKA_1: Flow<Int> = dataStore.data
-        .map { preferences ->
-            // Mengembalikan nilai tersimpan, atau string kosong "" jika null
-            preferences[ANGKA_1_KEY] ?: 0
-        }
-
-    // 4. Menulis/Menyimpan Data (Wajib menggunakan fungsi suspend / di dalam Coroutine)
-    suspend fun saveAngka_2(angka: Int) {
-        dataStore.edit { preferences ->
-            preferences[ANGKA_1_KEY] = angka
-        }
-    }
-}*/
