@@ -12,7 +12,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import kotlinx.coroutines.flow.first
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 /**
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 */
