@@ -68,7 +68,8 @@ fun greeting(
     modifier: Modifier = Modifier
 ) {
     var angka_1: Int by rememberSaveable { mutableIntStateOf(0) }
-
+    var i: Int by rememberSaveable { mutableIntStateOf(0) }
+    i++
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -94,5 +95,8 @@ fun greeting(
                 text = "Kurang 1"
             )
         }
+        Text(
+            text = "${i.toString()}_" + i.toString()
+        )
     }
 }
