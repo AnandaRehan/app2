@@ -70,15 +70,6 @@ class MainActivity : ComponentActivity() {
                     viewModel = SettingsViewModel(dataStoreManager),
                     onCheatDetected = {
                             Toast.makeText(this, "⚠️ Deteksi Manipulasi Memori!", Toast.LENGTH_SHORT).show()
-                    },
-                    refresh1 = {
-                        Toast.makeText(this, "refresh 1", Toast.LENGTH_SHORT).show()
-                    },
-                    refresh2 = {
-                        Toast.makeText(this, "refresh 2", Toast.LENGTH_SHORT).show()
-                    },
-                    refresh3 = {
-                        Toast.makeText(this, "refresh 3", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -138,14 +129,10 @@ class MainActivity : ComponentActivity() {
 fun greeting(
     //modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
-    onCheatDetected: () -> Unit,
-    refresh1: () -> Unit,
-    refresh2: () -> Unit,
-    refresh3: () -> Unit
+    onCheatDetected: () -> Unit
 ) {
-    refresh1()
-    val angka_1: Int by viewModel.angka_1.collectAsState()
-    val userName: String by viewModel.userName.collectAsState()
+    val angka_1 by viewModel.angka_1.collectAsState()
+    val userName by viewModel.userName.collectAsState()
 
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
@@ -154,14 +141,12 @@ fun greeting(
             .systemBarsPadding()
             .padding(16.dp)
     ) {
-        refresh2()
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
                 viewModel.saveAngka_1(angka_1 + 1)
             }
         ) {
-            refresh3()
             Text(
                 text = "Tambah 1"
             )
@@ -177,7 +162,7 @@ fun greeting(
         }
         OutlinedTextField(
             value = userName,
-            onValueChange = { viewModel.saveUserName(it) },
+            onValueChange = { newText -> viewModel.saveUserName(newText) },
             label = { Text("Nama") },
             modifier = Modifier.fillMaxWidth()
         )
