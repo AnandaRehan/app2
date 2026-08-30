@@ -11,7 +11,7 @@ class SettingsViewModel(
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
-    val angka_1: StateFlow<Int> = dataStoreManager.isDarkMode
+    val angka_1: StateFlow<Int> = dataStoreManager.angka_1
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),

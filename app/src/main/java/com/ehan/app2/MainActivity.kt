@@ -158,7 +158,7 @@ fun greeting(
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
-                angka_1++
+                viewModel.saveAngka_1(angka_1 + 1)
             }
         ) {
             refresh3()
@@ -168,7 +168,7 @@ fun greeting(
         }
         Button(
             onClick = {
-                angka_1--
+                viewModel.saveAngka_1(angka_1 - 1)
             }
         ) {
             Text(
