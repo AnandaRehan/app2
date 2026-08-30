@@ -2,6 +2,7 @@ package com.ehan.app2
 
 import android.os.Bundle
 import android.content.Context
+import android.widget.Toast
 
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
@@ -74,8 +75,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun greeting(
-    onCheatDetected: () Unit,
-    modifier: Modifier = Modifier
+    //modifier: Modifier = Modifier,
+    onCheatDetected: () -> Unit
 ) {
     var _angka_1: Int by remember { mutableStateOf(10) }
 
@@ -104,7 +105,7 @@ fun greeting(
         
         // Angka ini yang dicari cheater lewat Game Guardian (10 -> 17 -> 5)
         Text(
-            text = "$nilaiTampilan", 
+            text = "$angka_1", 
             style = MaterialTheme.typography.displayLarge
         )
 
@@ -114,8 +115,8 @@ fun greeting(
         Button(
             onClick = {
                 // Jalur resmi: Ubah nilai asli dulu, baru update tampilan
-                nilaiAsli += 7 
-                nilaiTampilan = nilaiAsli
+                _angka_1 += 7 
+                angka_1 = _angka_1
             }
         ) {
             Text("Tambah Koin (+7)")
