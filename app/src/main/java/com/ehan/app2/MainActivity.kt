@@ -51,8 +51,6 @@ import com.ehan.app2.ui.theme.App2Theme
 import com.ehan.app2.ui.MainViewModel
 */
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels() { MainViewModel.Factory }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
