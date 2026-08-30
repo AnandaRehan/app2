@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             App2Theme {
                 greeting(
-                    viewModel = SettingsViewModel(dataStoreManager).
+                    viewModel = SettingsViewModel(dataStoreManager),
                     onCheatDetected = {
                             Toast.makeText(this, "⚠️ Deteksi Manipulasi Memori!", Toast.LENGTH_SHORT).show()
                     }
