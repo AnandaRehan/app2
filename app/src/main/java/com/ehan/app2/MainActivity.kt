@@ -12,6 +12,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import kotlinx.coroutines.flow.first
+import androidx.lifecycle.viewModel
+import androidx.lifecycle.viewModelScope
 /**
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 */
@@ -134,14 +136,10 @@ fun greeting(
 ) {
     val angka_1 by viewModel.angka_1.collectAsState()
     val _userName: String by viewModel.userName.collectAsState()
+    var userName: String by rememberSaveable { mutableStateOf(_userName) }
     val helper = TimeoutHelper(viewModelScope)
     var timeout: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
-    var userName: String
-    if (timeout == null) {
-        userName = _userName
-    } else {
-        userName by rememberSaveable { mutableStateOf(_userName) }
-    }
+
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -171,12 +169,13 @@ fun greeting(
         OutlinedTextField(
             value = userName,
             onValueChange = { newText ->
+                userName = newText
                 if (timeout != null) {
                     helper.clearTimeout(timeout)
                     timeout = null
                 }
-                helper.setTimeout(3000) {
-                    viewModel.saveUserName(newText)
+                helper.setTimeout(1000) {
+                    viewModel.saveUserName(userName)
                     timeout = null
                 }
             },
