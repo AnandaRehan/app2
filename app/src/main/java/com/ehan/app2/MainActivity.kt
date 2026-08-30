@@ -70,6 +70,15 @@ class MainActivity : ComponentActivity() {
                     viewModel = SettingsViewModel(dataStoreManager),
                     onCheatDetected = {
                             Toast.makeText(this, "⚠️ Deteksi Manipulasi Memori!", Toast.LENGTH_SHORT).show()
+                    },
+                    refresh1 = {
+                        Toast.makeText(this, "refresh 1", Toast.LENGTH_SHORT).show()
+                    },
+                    refresh2 = {
+                        Toast.makeText(this, "refresh 2", Toast.LENGTH_SHORT).show()
+                    },
+                    refresh3 = {
+                        Toast.makeText(this, "refresh 3", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -129,9 +138,12 @@ class MainActivity : ComponentActivity() {
 fun greeting(
     //modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
-    onCheatDetected: () -> Unit
+    onCheatDetected: () -> Unit,
+    refresh1: () -> Unit,
+    refresh2: () -> Unit,
+    refresh3: () -> Unit
 ) {
-    Toast.makeText(this, "refresh 1", Toast.LENGTH_SHORT).show()
+    refresh1()
     val angka_1: Int by viewModel.angka_1.collectAsState()
     val userName: String by viewModel.userName.collectAsState()
 
@@ -142,14 +154,14 @@ fun greeting(
             .systemBarsPadding()
             .padding(16.dp)
     ) {
-        Toast.makeText(this, "refresh 2", Toast.LENGTH_SHORT).show()
+        refresh2()
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
                 angka_1++
             }
         ) {
-            Toast.makeText(this, "refresh 3", Toast.LENGTH_SHORT).show()
+            refresh3()
             Text(
                 text = "Tambah 1"
             )
