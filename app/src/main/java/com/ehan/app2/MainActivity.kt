@@ -105,10 +105,7 @@ fun greeting(
 ) {
     val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle()
 
-    ShowMessage(
-        text = angka_1.toString(),
-        context = Context
-    )
+    ShowMessage(Context, angka_1.toString())
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = Modifier
