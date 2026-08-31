@@ -108,7 +108,8 @@ fun greeting(
     val context: Context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle(lifecycleOwner = lifecycleOwner)
+    // val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle(lifecycleOwner = lifecycleOwner)
+    var angka_1: Int by rememberSaveable { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -119,7 +120,8 @@ fun greeting(
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
-                viewModel.saveAngka_1(angka_1 + 1)
+                angka_1++
+                viewModel.saveAngka_1(angka_1 * 5)
             }
         ) {
             Text(
@@ -128,7 +130,8 @@ fun greeting(
         }
         Button(
             onClick = {
-                viewModel.saveAngka_1(angka_1 - 1)
+                angka_1--
+                viewModel.saveAngka_1(angka_1 * 5)
             }
         ) {
             Text(
