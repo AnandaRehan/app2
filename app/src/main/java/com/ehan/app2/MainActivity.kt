@@ -68,14 +68,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        ShowMessage(
+            context = this,
+            text = "on create"
+        )
+
         val dataStoreManager = DataStoreManager(this)
         setContent {
             App2Theme {
                 greeting(
-                    viewModel = SettingsViewModel(dataStoreManager),
-                    shortMess = { p ->
-                        Toast.makeText(this, if (p.isEmpty()) { "" } else { p }, Toast.LENGTH_SHORT).show()
-                    }
+                    viewModel = SettingsViewModel(dataStoreManager)
                 )
             }
         }
@@ -99,16 +101,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun greeting(
-    viewModel: SettingsViewModel,
-    shortMess: (mes: String) -> Unit
+    viewModel: SettingsViewModel
 ) {
-    val _angka_1: Int by viewModel.angka_1.collectAsState()
-    var angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
-    val _userName by viewModel.userName.collectAsState()
-    var userName by rememberSaveable { mutableStateOf(_userName) }
-    val helper: TimeoutHelper = TimeoutHelper()
-    var timeoutJob: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
+    val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle()
 
+    ShowMessage(
+        text = angka_1.toString(),
+        context = Context
+    )
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -119,8 +119,7 @@ fun greeting(
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
-                angka_1++
-                viewModel.saveAngka_1(angka_1)
+                viewModel.saveAngka_1(angka_1 + 1)
             }
         ) {
             Text(
@@ -129,32 +128,13 @@ fun greeting(
         }
         Button(
             onClick = {
-                angka_1--
-                viewModel.saveAngka_1(angka_1)
+                viewModel.saveAngka_1(angka_1 + 1)
             }
         ) {
             Text(
                 text = "Kurang 1"
             )
         }
-        OutlinedTextField(
-            value = userName,
-            onValueChange = { newText ->
-                userName = newText
-                if (timeoutJob != null) {
-                    shortMess("clear timeout")
-                }
-                helper.clearTimeout(timeoutJob)
-
-                timeoutJob = helper.setTimeout(3000) {
-                    shortMess("done timeout")
-                    viewModel.saveUserName(userName)
-                    timeoutJob = null
-                }
-            },
-            label = { Text("Nama") },
-            modifier = Modifier.fillMaxWidth()
-        )
 
         Text(
             text = "Halo, ${userName.ifEmpty { "Guest" }}!",
