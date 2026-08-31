@@ -76,7 +76,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             App2Theme {
                 greeting(
-                    viewModel = SettingsViewModel(dataStoreManager)
+                    viewModel = SettingsViewModel(dataStoreManager),
+                    shortMess = { p: String = "" ->
+                        Toast.makeText(this, p, Toast.LENGTH_SHORT).show()
+                    }
                 )
             }
         }
@@ -100,12 +103,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun greeting(
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel,
+    shortMess: (mes: String) -> Unit
 ) {
     val _angka_1: Int by viewModel.angka_1.collectAsState()
     var angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
-    val _userName: String by viewModel.userName.collectAsState()
-    var userName: String by rememberSaveable { mutableStateOf(_userName) }
+    val _userName by viewModel.userName.collectAsState()
+    var userName by rememberSaveable { mutableStateOf(_userName) }
     val helper: TimeoutHelper = TimeoutHelper()
     var timeoutJob: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
 
@@ -146,6 +150,7 @@ fun greeting(
                     timeoutJob = null
                 }
                 helper.setTimeout(1000) {
+                    shortMess("done timeout")
                     viewModel.saveUserName(userName)
                     timeoutJob = null
                 }
