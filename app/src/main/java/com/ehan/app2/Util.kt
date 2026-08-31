@@ -2,6 +2,7 @@ package com.ehan.app2
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,7 @@ class TimeoutHelper {
 }
 
 fun ShowMessage(
-    context: Context,
+    context: Context = LocalContext.current,
     text: String = ""
 ) {
     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()

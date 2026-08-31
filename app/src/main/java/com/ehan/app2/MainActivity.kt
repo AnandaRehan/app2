@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -69,8 +70,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         ShowMessage(
-            context = this,
-            text = "on create"
+            this,
+            "on create"
+        )
+        ShowMessage(
+            text = "on create 2"
         )
 
         val dataStoreManager = DataStoreManager(this)
@@ -105,7 +109,6 @@ fun greeting(
 ) {
     val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle()
 
-    ShowMessage(Context, angka_1.toString())
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = Modifier
@@ -130,6 +133,18 @@ fun greeting(
         ) {
             Text(
                 text = "Kurang 1"
+            )
+        }
+        Button(
+            onClick = {
+                ShowMessage(
+                    context = LocalContext.current,
+                    text = angka_1.toString()
+                )
+            }
+        ) {
+            Text(
+                text = "Tampilkan Toast"
             )
         }
     }
