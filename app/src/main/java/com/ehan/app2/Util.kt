@@ -1,8 +1,8 @@
 package com.ehan.app2
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class TimeoutHelper(private val scope: CoroutineScope) {
