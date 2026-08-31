@@ -29,19 +29,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-/**
+//import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-*/
 import androidx.compose.runtime.saveable.rememberSaveable
-/**
 import androidx.compose.runtime.setValue
-*/
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Modifier
@@ -78,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 greeting(
                     viewModel = SettingsViewModel(dataStoreManager),
                     shortMess = { p ->
-                        Toast.makeText(this, p, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, if (p.isEmpty()) { "" } else { p }, Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -104,7 +99,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun greeting(
     viewModel: SettingsViewModel,
-    shortMess: (mes: String = "") -> Unit
+    shortMess: (mes: String) -> Unit
 ) {
     val _angka_1: Int by viewModel.angka_1.collectAsState()
     var angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
