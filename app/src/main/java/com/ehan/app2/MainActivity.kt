@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -104,10 +105,11 @@ class MainActivity : ComponentActivity() {
 fun greeting(
     viewModel: SettingsViewModel
 ) {
-    val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle()
     val context: Context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-  //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
+    val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle(lifecycleOwner = lifecycleOwner)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
