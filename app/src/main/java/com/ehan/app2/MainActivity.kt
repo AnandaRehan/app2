@@ -20,7 +20,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.*
+// import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 /**
 import androidx.compose.runtime.Composable
@@ -33,13 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 /**
 import androidx.compose.runtime.setValue
-import androidx.compose.material3.Button
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text*/
+*/
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Modifier
@@ -104,7 +105,7 @@ fun greeting(
     val angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
     val _userName: String by viewModel.userName.collectAsState()
     var userName: String by rememberSaveable { mutableStateOf(_userName) }
-    val helper = TimeoutHelper(CoroutineScope, Dispatchers)
+    val helper: TimeoutHelper = TimeoutHelper()
     var timeoutJob: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
 
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }

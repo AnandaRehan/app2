@@ -6,16 +6,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class TimeoutHelper(
-    private val scope: CoroutineScope,
-    private val dispatchers: Dispatchers
-) {
+class TimeoutHelper {
 
     fun setTimeout(
         delayMs: Long,
         action: () -> Unit
     ): Job {
-        return scope(dispatchers.Main).launch {
+        return CoroutineScope(Dispatchers.Main).launch {
             delay(delayMs)
             action()
         }
