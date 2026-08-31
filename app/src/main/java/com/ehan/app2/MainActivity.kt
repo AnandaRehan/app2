@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
             App2Theme {
                 greeting(
                     viewModel = SettingsViewModel(dataStoreManager),
-                    shortMess = { p: String = "" ->
+                    shortMess = { p ->
                         Toast.makeText(this, p, Toast.LENGTH_SHORT).show()
                     }
                 )
