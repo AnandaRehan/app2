@@ -104,7 +104,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun greeting(
     viewModel: SettingsViewModel,
-    shortMess: (mes: String) -> Unit
+    shortMess: (mes: String = "") -> Unit
 ) {
     val _angka_1: Int by viewModel.angka_1.collectAsState()
     var angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
@@ -146,10 +146,11 @@ fun greeting(
             onValueChange = { newText ->
                 userName = newText
                 if (timeoutJob != null) {
-                    helper.clearTimeout(timeoutJob)
-                    timeoutJob = null
+                    shortMess("clear timeout")
                 }
-                helper.setTimeout(1000) {
+                helper.clearTimeout(timeoutJob)
+
+                timeoutJob = helper.setTimeout(3000) {
                     shortMess("done timeout")
                     viewModel.saveUserName(userName)
                     timeoutJob = null
