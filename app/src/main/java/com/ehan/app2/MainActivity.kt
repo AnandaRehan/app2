@@ -1,7 +1,7 @@
 package com.ehan.app2
 
 import android.content.Context
-import android.content.SharedPreferencess
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -53,6 +53,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import com.ehan.app2.ui.theme.App2Theme
 /**
