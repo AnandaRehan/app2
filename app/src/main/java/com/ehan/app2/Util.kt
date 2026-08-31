@@ -26,7 +26,7 @@ class TimeoutHelper {
 }
 
 fun ShowMessage(
-    context: Context = Context,
+    context: Context,
     text: String = ""
 ) {
     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()

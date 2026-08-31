@@ -135,10 +135,5 @@ fun greeting(
                 text = "Kurang 1"
             )
         }
-
-        Text(
-            text = "Halo, ${userName.ifEmpty { "Guest" }}!",
-            style = MaterialTheme.typography.headlineMedium
-        )
     }
 }
