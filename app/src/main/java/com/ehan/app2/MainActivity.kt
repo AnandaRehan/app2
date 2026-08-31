@@ -128,7 +128,7 @@ fun greeting(
         }
         Button(
             onClick = {
-                viewModel.saveAngka_1(angka_1 + 1)
+                viewModel.saveAngka_1(angka_1 - 1)
             }
         ) {
             Text(
