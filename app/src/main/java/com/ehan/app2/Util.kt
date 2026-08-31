@@ -1,8 +1,9 @@
 package com.ehan.app2
 
-import android.app.Activity
-import android.os.Build
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TimeoutHelper(private val scope: CoroutineScope) {
 

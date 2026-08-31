@@ -3,7 +3,6 @@ package com.ehan.app2
 import android.os.Bundle
 import android.content.Context
 import android.widget.Toast
-
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
@@ -12,7 +11,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import kotlinx.coroutines.flow.first
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 /**
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 */
@@ -138,7 +137,7 @@ fun greeting(
     val angka_1 by viewModel.angka_1.collectAsState()
     val _userName: String by viewModel.userName.collectAsState()
     var userName: String by rememberSaveable { mutableStateOf(_userName) }
-    val helper = TimeoutHelper(viewModelScope)
+    val helper = TimeoutHelper(lifecycleScope)
     var timeout: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
 
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
