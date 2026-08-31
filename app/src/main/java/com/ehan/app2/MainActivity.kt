@@ -73,9 +73,6 @@ class MainActivity : ComponentActivity() {
             this,
             "on create"
         )
-        ShowMessage(
-            text = "on create 2"
-        )
 
         val dataStoreManager = DataStoreManager(this)
         setContent {
@@ -108,6 +105,7 @@ fun greeting(
     viewModel: SettingsViewModel
 ) {
     val angka_1: Int by viewModel.angka_1.collectAsStateWithLifecycle()
+    val context: Context = LocalContext.current
 
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
@@ -137,10 +135,7 @@ fun greeting(
         }
         Button(
             onClick = {
-                ShowMessage(
-                    context = LocalContext.current,
-                    text = angka_1.toString()
-                )
+                ShowMessage(context, text = angka_1.toString())
             }
         ) {
             Text(
