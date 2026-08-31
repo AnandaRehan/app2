@@ -3,6 +3,8 @@ package com.ehan.app2
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +25,7 @@ import androidx.compose.runtime.*
 /**
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -51,7 +54,9 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -69,10 +74,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             App2Theme {
                 greeting(
-                    viewModel = SettingsViewModel(dataStoreManager),
-                    onCheatDetected = {
-                            Toast.makeText(this, "⚠️ Deteksi Manipulasi Memori!", Toast.LENGTH_SHORT).show()
-                    }
+                    viewModel = SettingsViewModel(dataStoreManager)
                 )
             }
         }
@@ -80,10 +82,7 @@ class MainActivity : ComponentActivity() {
 }
 /**
     Toast.makeText(this, "refresh", Toast.LENGTH_SHORT).show()
-    var _angka_1: Int by rememberSaveable { mutableStateOf(10) }
-
-    var angka_1: Int by remember { mutableStateOf(10) }
-
+    
     LaunchedEffect(angka_1) {
         if (angka_1 != _angka_1) {
             // Jika Game Guardian mengubah nilaiTampilan di RAM menjadi 9999, 
@@ -95,49 +94,18 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Koin Game Anda:",
-            style = MaterialTheme.typography.titleMedium
-        )
-        
-        // Angka ini yang dicari cheater lewat Game Guardian (10 -> 17 -> 5)
-        Text(
-            text = "$angka_1", 
-            style = MaterialTheme.typography.displayLarge
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Tombol Sah untuk mengubah nilai dari dalam sistem game
-        Button(
-            onClick = {
-                // Jalur resmi: Ubah nilai asli dulu, baru update tampilan
-                _angka_1 += 7
-                angka_1 = _angka_1
-                angka_1 = _angka_1
-            }
-        ) {
-            Text("Tambah Koin (+7)")
-        }
-    }
 */
 
 @Composable
 fun greeting(
-    //modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel,
-    onCheatDetected: () -> Unit
+    viewModel: SettingsViewModel
 ) {
-    val angka_1 by viewModel.angka_1.collectAsState()
+    val _angka_1: Int by viewModel.angka_1.collectAsState()
+    val angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
     val _userName: String by viewModel.userName.collectAsState()
     var userName: String by rememberSaveable { mutableStateOf(_userName) }
-    val helper = TimeoutHelper(lifecycleScope)
-    var timeout: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
+    val helper = TimeoutHelper(CoroutineScope, Dispatchers)
+    var timeoutJob: Job? by rememberSaveable { mutableStateOf<Job?>(null) }
 
   //  var angka_1: Int by rememberSaveable { mutableStateOf(0) }
     Column(
@@ -149,7 +117,8 @@ fun greeting(
         Text(text = "Angka Saat Ini $angka_1")
         Button(
             onClick = {
-                viewModel.saveAngka_1(angka_1 + 1)
+                angka_1++
+                viewModel.saveAngka_1(angka_1)
             }
         ) {
             Text(
@@ -158,7 +127,8 @@ fun greeting(
         }
         Button(
             onClick = {
-                viewModel.saveAngka_1(angka_1 - 1)
+                angka_1--
+                viewModel.saveAngka_1(angka_1)
             }
         ) {
             Text(
@@ -169,13 +139,13 @@ fun greeting(
             value = userName,
             onValueChange = { newText ->
                 userName = newText
-                if (timeout != null) {
-                    helper.clearTimeout(timeout)
-                    timeout = null
+                if (timeoutJob != null) {
+                    helper.clearTimeout(timeoutJob)
+                    timeoutJob = null
                 }
                 helper.setTimeout(1000) {
                     viewModel.saveUserName(userName)
-                    timeout = null
+                    timeoutJob = null
                 }
             },
             label = { Text("Nama") },
