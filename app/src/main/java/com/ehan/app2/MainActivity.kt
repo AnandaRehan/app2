@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -102,7 +103,7 @@ fun greeting(
     viewModel: SettingsViewModel
 ) {
     val _angka_1: Int by viewModel.angka_1.collectAsState()
-    val angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
+    var angka_1: Int by rememberSaveable { mutableStateOf(_angka_1) }
     val _userName: String by viewModel.userName.collectAsState()
     var userName: String by rememberSaveable { mutableStateOf(_userName) }
     val helper: TimeoutHelper = TimeoutHelper()
