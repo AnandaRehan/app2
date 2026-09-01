@@ -148,8 +148,8 @@ data class Move(
 )
 
 data class MoveResult(
-        val newBoard: Map<Position, MutableList<Piece>>
-    )
+    val newBoard: Map<Position, MutableList<Piece>>
+)
 
 
 /**
@@ -402,36 +402,35 @@ fun PieceToken(
 }
 
 fun applyMove(
-        board: Map<Position, <MutableList<Piece>>>,
-        move: Move
-    ): MoveResult {
-        val newBoard = board.toMutableMap()
-        if (!(newBoard[move.from] is MutableList<Piece>>) || newBoard[move.from].isEmpty()) {
-            return MoveResult(board)
+    board: Map<Position, <MutableList<Piece>>>,
+    move: Move
+): MoveResult {
+    val newBoard = board.toMutableMap()
+    if (!(newBoard[move.from] is MutableList<Piece>>) || newBoard[move.from].isEmpty()) {
+        return MoveResult(
+            newBoard = board
+        )
+    }
+    var _piece: Piece
+    for (i in newBoard[move.from].indices) {
+        val piece = newBoard[move.from][i]
+        if (move.player == piece.player) {
+            _piece = newBoard[move.from].removeAt(i)
         }
-        var _piece: Piece
-        for (i in newBoard[move.from].indices) {
-            val piece = newBoard[move.from][i]
-            if (move.player == piece.player) {
-                _piece = newBoard[move.from].removeAt(i)
-            }
-        }
-        val piece = _piece.copy(position = move.to)
+    }
+    val piece = _piece.copy(position = move.to)
         // Remove captured pieces
         
         // Check for promotion (crowned as Dam / King)
 
-        val updatedPiece = piece
+    val updatedPiece = piece
     if (newBoard[move.to] is MutableList<Piece>>) {
         newBoard[move.to].add(updatedPiece)
     } else {
         newBoard[move.to] = mutableListOf(updatedPiece)
     }
-
-        // If it was a capture and NOT just promoted, check if more jumps are possible
-        
-        return MoveResult(
-            newBoard = newBoard
-        )
+    return MoveResult(
+        newBoard = newBoard
+    )
 }
 
