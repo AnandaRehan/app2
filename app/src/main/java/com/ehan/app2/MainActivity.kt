@@ -159,7 +159,11 @@ fun greeting(
     val context: Context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val boardBorderColor = Color(0xFF5D4037)
+    val boardBorderColor: Color = Color(0xFF5D4037)
+    val lightSquareColor: Color = Color(0xFFF0D9B5)
+    val darkSquareColor: Color = Color(0xFFB58863)
+    val highlightColor: Color = Color(0xFFFFD54F)
+
     var board by rememberSaveable { mutableStateOf(createInitialBoard()) }
     var dadu: Int? by rememberSaveable { mutableStateOf<Int?>(null) }
 /**
@@ -224,9 +228,10 @@ fun greeting(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    val squareColor = Color(0xFFF0D9B5)
-
                     val pos = Position(r, 0)
+                    val isDark = pos.isDarkSquare()
+                    val squareColor = if (isDark) darkSquareColor else lightSquareColor
+                    
                     val pieces = board[pos]
                     Box(
                         modifier = Modifier
@@ -236,13 +241,36 @@ fun greeting(
                                 .testTag("square_${pos.row}_${pos.col}"),
                             contentAlignment = Alignment.Center
                     ) {
+                        if (r == 7) {
+                                Text(
+                                    text = ('A' + c).toString(),
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = lightSquareColor.copy(alpha = 0.5f),
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(2.dp)
+                                )
+                            }
+                            if (c == 7 || c == 0) {
+                                Text(
+                                    text = (8 - r).toString(),
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = lightSquareColor.copy(alpha = 0.5f),
+                                    modifier = Modifier
+                                        .align(Alignment.TopStart)
+                                        .padding(2.dp)
+                                )
+                            }
+                            
                         if (!pieces.isNullOrEmpty()) {
-                            for (i in pieces.indices)
+                            for (i in pieces.indices) {
                                 PieceToken(
                                     piece = pieces[i],
                                     modifier = Modifier.padding(4.dp)
                                 )
-                        }
+                        }}
                     }
                 }
             }
@@ -251,7 +279,9 @@ fun greeting(
     Button(
         onClick = {
             dadu = 1
-            ShowMessage(context, ("A" + 10) + ("A" + 0))
+            val ab = ('A' + 10)
+            val ba = ('A' + 0)
+            ShowMessage(context, "$ab$ba")
         }
     ) {
         Text(text = dadu.toString())
@@ -288,10 +318,13 @@ fun PieceToken(
     val baseColor: Color = Color(0xFFDC2626)
     val accentColor: Color = Color(0xFFFEF2F2)
 
+    val elevation = 4.dp
     Box(
         modifier = modifier
             .fillMaxSize()
             .padding(3.dp)
+            .shadow(elevation, CircleShape)
+            .clip(CircleShape)
             .background(
                 Brush.radialGradient(
                     colors = listOf(
@@ -308,6 +341,8 @@ fun PieceToken(
         Box(
             modifier = Modifier
                 .fillMaxSize(0.72f),
+                .border(1.5.dp, accentColor.copy(alpha = 0.35f), CircleShape)
+                .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
             
