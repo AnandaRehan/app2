@@ -15,8 +15,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-/**
+// import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,12 +24,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
-*/
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-/**
 import androidx.compose.foundation.layout.systemBarsPadding
-*/
 import androidx.compose.material3.*
 /**
 import androidx.compose.material3.Button
@@ -242,7 +238,7 @@ fun greeting(
                                 .testTag("square_${pos.row}_${pos.col}"),
                             contentAlignment = Alignment.Center
                     ) {
-                        if (piece.isNotEmpty()) {
+                        if (piece?.isNotEmpty()) {
                             for (p in piece)
                                 PieceToken(
                                     piece = p,
