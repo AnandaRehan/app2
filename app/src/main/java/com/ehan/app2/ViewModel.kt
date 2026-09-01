@@ -36,4 +36,9 @@ class SettingsViewModel(
             dataStoreManager.setUserName(name)
         }
     }
+    fun getData(name: String) {
+        viewModelScope.launch {
+            dataStoreManager.getData(name)
+        }
+    }
 }

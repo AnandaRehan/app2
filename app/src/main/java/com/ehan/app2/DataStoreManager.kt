@@ -34,4 +34,22 @@ class DataStoreManager(private val context: Context) {
             preferences[USER_NAME_KEY] = name
         }
     }
+
+    suspend fun getData(name: String) {
+        val KEY = when (name) {
+            "angka_1" -> ANGKA_1_KEY
+            "userName" -> USER_NAME_KEY
+            else -> null
+        }
+        if (KEY == null) {
+            return null
+        }
+        return context
+            .dataStore
+            .data
+            .map { preferences ->
+                preferences[KEY] ?: null
+            }
+        }
+    }
 }
