@@ -82,9 +82,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import com.ehan.app2.ui.theme.App2Theme
-/**
-import com.ehan.app2.ui.MainViewModel
-*/
+import com.ehan.app2.engine.GameEngine
+import com.ehan.app2.model.Move
+import com.ehan.app2.model.MoveResult
+import com.ehan.app2.model.Piece
+import com.ehan.app2.model.PlayerPiece
+import com.ehan.app2.model.Position
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,40 +120,6 @@ class MainActivity : ComponentActivity() {
 
 */
 
-enum class PlayerPiece(val displayName: String, val shortName: String) {
-    PLAYER_1("Pemain 1 (Merah)", "Merah"),
-    PLAYER_2("Pemain 2 (Hitam)", "Hitam");
-
-    fun opponent(): PlayerPiece = if (this == PLAYER_1) PLAYER_2 else PLAYER_1
-}
-
-data class Position(val row: Int, val col: Int) {
-    fun isValid(): Boolean = row in 0..3 && col == 0
-    fun isDarkSquare(): Boolean = (row + col) % 2 == 1
-
-    val notation: String
-        get() {
-            val colChar = ('A' + col)
-            val rowNum = 4 - row
-            return "$colChar$rowNum"
-        }
-}
-
-data class Piece(
-    val player: PlayerPiece,
-    val position: Position
-)
-
-data class Move(
-    val from: Position,
-    val to: Position,
-    val player: PlayerPiece
-)
-
-data class MoveResult(
-    val newBoard: Map<Position, MutableList<Piece>>
-)
-
 
 /**
 data class Move(
@@ -177,60 +146,18 @@ fun greeting(
     val darkSquareColor: Color = Color(0xFFB58863)
     val highlightColor: Color = Color(0xFFFFD54F)
 
-    var board by rememberSaveable { mutableStateOf(createInitialBoard()) }
+    var board by rememberSaveable { mutableStateOf(GameEngine.createInitialBoard()) }
     var dadu: Int? by rememberSaveable { mutableStateOf<Int?>(null) }
-/**
-    fun onSquareClicked(pos: Position) {
-
-        val piece = board[pos]
-
-        // 1. If clicking a valid target square for currently selected piece, execute move
-        val validMove = validMoves.find { it.to == pos }
-        if (validMove != null) {
-            handleMove(validMove)
-            return
-        }
-
-        // 2. If in multi-jump mode, cannot select other pieces
-        if (activeJumpPiece != null) {
-            return
-        }
-
-        // 3. Select friendly piece if legal moves exist
-        if (piece != null && piece.player == currentTurn) {
-            val movesForPiece = CheckersEngine.getValidMovesForSelected(
-                board = board,
-                selectedPos = pos,
-                player = currentTurn,
-                rule = gameRule,
-                forceCapture = forceCapture,
-                activeJumpPiece = null
-            )
-            if (movesForPiece.isNotEmpty() || !forceCapture) {
-                selectedPosition = pos
-                hintMove = null
-                if (isSoundEnabled) {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                }
-            }
-        } else {
-            selectedPosition = null
-        }
-    }*/
 
     fun handleMove(move: Move) {
-        // Save snapshot for undo
-        val validMove: Boolean = move.to.isValid()
-        if (validMove) {
-            val moveResult: MoveResult = applyMove(board, move)
-            board = moveResult.newBoard
-    } else {
+        if (move.to.isValid() == true) {
+            val result: MoveResult = GameEngine.applyMove(board, move)
+            board = result.newBoard
+        } else {
             ShowMessage(context, "in valid move $move.to.notation")
+        }
     }
 
-
-    }
-    
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -321,8 +248,7 @@ fun greeting(
             if (piece != null && dadu != null) {
                 val from: Position = piece.position
                 val to: Position = from.copy(row = from.row + dadu)
-                val move: Move = Move(from = from, to = to, player = currentPlayer)
-                handleMove(move)
+                handleMove(Move(from = from, to = to, player = currentPlayer))
             } else {
                 ShowMessage(context, "null")
             }
@@ -331,22 +257,6 @@ fun greeting(
         Text(text = dadu.toString())
     }
     }
-}
-
-
-fun createInitialBoard(): Map<Position, MutableList<Piece>> {
-        val board = mutableMapOf<Position, MutableList<Piece>>()
-        
-        val pos = Position(0, 0)
-        val p = mutableListOf(Piece(PlayerPiece.PLAYER_1, pos), Piece(PlayerPiece.PLAYER_2), pos)
-        board[pos] = p
-                    
-                
-            
-        
-        
-        
-        return board
 }
 
 @Composable
@@ -400,37 +310,3 @@ fun PieceToken(
         }
     }
 }
-
-fun applyMove(
-    board: Map<Position, <MutableList<Piece>>>,
-    move: Move
-): MoveResult {
-    val newBoard = board.toMutableMap()
-    if (!(newBoard[move.from] is MutableList<Piece>>) || newBoard[move.from].isEmpty()) {
-        return MoveResult(
-            newBoard = board
-        )
-    }
-    var _piece: Piece
-    for (i in newBoard[move.from].indices) {
-        val piece = newBoard[move.from][i]
-        if (move.player == piece.player) {
-            _piece = newBoard[move.from].removeAt(i)
-        }
-    }
-    val piece = _piece.copy(position = move.to)
-        // Remove captured pieces
-        
-        // Check for promotion (crowned as Dam / King)
-
-    val updatedPiece = piece
-    if (newBoard[move.to] is MutableList<Piece>>) {
-        newBoard[move.to].add(updatedPiece)
-    } else {
-        newBoard[move.to] = mutableListOf(updatedPiece)
-    }
-    return MoveResult(
-        newBoard = newBoard
-    )
-}
-
