@@ -151,7 +151,7 @@ fun greeting(
 
     fun handleMove(move: Move) {
         if (move.to.isValid() == true) {
-            val result: MoveResult = GameEngine.applyMove(board, move)
+            val result = GameEngine.applyMove(board, move)
             board = result.newBoard
         } else {
             ShowMessage(context, "in valid move $move.to.notation")
@@ -219,7 +219,7 @@ fun greeting(
                                 )
                             }
                             
-                        if (!pieces?.isNullOrEmpty()) {
+                        if (pieces is MutableList<Piece>) {
                             for (i in pieces.indices) {
                                 PieceToken(
                                     piece = pieces[i],
@@ -237,10 +237,14 @@ fun greeting(
             var _piece: Piece? = null
             dadu = 1
             for (k in board) {
-                for (i in board[k]) {
-                    var __piece = board[k][i]
-                    if (__piece.player == currentPlayer) {
-                        _piece = __piece
+                if (board[k] is MutableList<Piece>) {
+                    for (i in board[k]) {
+                        var __piece = board[k][i]
+                        if (__piece is Piece) {
+                            if (__piece.player == currentPlayer) {
+                                _piece = __piece
+                            }
+                        }
                     }
                 }
             }

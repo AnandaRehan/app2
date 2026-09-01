@@ -16,7 +16,7 @@ object GameEngine {
     }
     
     fun applyMove(
-        board: Map<Position, <MutableList<Piece>>>,
+        board: Map<Position, MutableList<Piece>>,
         move: Move
     ): MoveResult {
         val newBoard = board.toMutableMap()
