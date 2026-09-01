@@ -131,13 +131,14 @@ data class Position(val row: Int, val col: Int) {
     val notation: String
         get() {
             val colChar = ('A' + col)
-            val rowNum = 8 - row
+            val rowNum = 4 - row
             return "$colChar$rowNum"
         }
 }
 
 data class Piece(
-    val player: PlayerPiece
+    val player: PlayerPiece,
+    val position: Position
 )
 /**
 data class Move(
@@ -204,6 +205,20 @@ fun greeting(
             selectedPosition = null
         }
     }*/
+
+    fun handleMove(move: Move) {
+        // Save snapshot for undo
+        val validMove: Boolean = move.to.isValid()
+        if (validMove) {
+        val moveResult = applyMove(board, move)
+        board = moveResult.newBoard
+    } else {
+            ShowMessage(context, "in valid move $move.to.notation")
+    }
+
+
+    }
+    
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -279,10 +294,25 @@ fun greeting(
     }
     Button(
         onClick = {
+            var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
+            var piece: Piece? = null
             dadu = 1
-            val ab = ('A' + 10)
-            val ba = ('A' + 0)
-            ShowMessage(context, "$ab$ba")
+            for (k in board) {
+                for (i in board[k]) {
+                    _piece = board[k][i]
+                    if (_piece.player == currentPlayer) {
+                        piece = _piece
+                    }
+                }
+            }
+            if (piece != null) {
+                val from: Position = piece.position
+                val to: Position = from.copy(row = from.row + dadu)
+                val move: Move = Move(from = from, to = to, player = currentPlayer)
+                handleMove(move)
+            } else {
+                ShowMessage(context, "null")
+            }
         }
     ) {
         Text(text = dadu.toString())
@@ -295,7 +325,7 @@ fun createInitialBoard(): Map<Position, MutableList<Piece>> {
         val board = mutableMapOf<Position, MutableList<Piece>>()
         
         val pos = Position(0, 0)
-        val p = mutableListOf(Piece(PlayerPiece.PLAYER_1), Piece(PlayerPiece.PLAYER_2))
+        val p = mutableListOf(Piece(PlayerPiece.PLAYER_1, pos), Piece(PlayerPiece.PLAYER_2), pos)
         board[pos] = p
                     
                 
@@ -357,3 +387,49 @@ fun PieceToken(
         }
     }
 }
+
+data class Move(
+    val from: Position,
+    val to: Position,
+    val player: PlayerPiece
+)
+
+fun applyMove(
+        board: Map<Position, <MutableList<Piece>>,
+        move: Move
+    ): MoveResult {
+        val newBoard = board.toMutableMap()
+        if (newBoard[move.from]?.isNotEmpty() != true) {
+            return MoveResult(board)
+        }
+        var _piece: Piece
+        for (i in newBoard[move.from].indices) {
+            val piece = newBoard[move.from][i]
+            if (move.player == piece.player) {
+                _piece = newBoard[move.from].removeAt(i)
+            }
+        }
+        val piece = _piece.copy(position = move.to)
+        // Remove captured pieces
+        
+        // Check for promotion (crowned as Dam / King)
+        
+        val updatedPiece = piece
+    if (!newBoard[move.to]?.isNullOrEmpty()) {
+        newBoard[move.to].add(updatedPiece)
+    } else {
+        newBoard[move.to] = mutableListOf(updatedPiece)
+    }
+
+        // If it was a capture and NOT just promoted, check if more jumps are possible
+        
+        return MoveResult(
+            newBoard = newBoard
+        )
+}
+
+data class MoveResult(
+        val newBoard: Map<Position, Piece>
+    )
+
+
