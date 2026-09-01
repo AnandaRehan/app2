@@ -251,7 +251,7 @@ fun greeting(
     Button(
         onClick = {
             dadu = 1
-            ShowMessage(context, "aaa")
+            ShowMessage(context, ("A" + 10) + ("A" + 0))
         }
     ) {
         Text(text = dadu.toString())
