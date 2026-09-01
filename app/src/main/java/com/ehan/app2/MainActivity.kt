@@ -140,6 +140,18 @@ data class Piece(
     val player: PlayerPiece,
     val position: Position
 )
+
+data class Move(
+    val from: Position,
+    val to: Position,
+    val player: PlayerPiece
+)
+
+data class MoveResult(
+        val newBoard: Map<Position, Piece>
+    )
+
+
 /**
 data class Move(
     val from: Position,
@@ -210,7 +222,7 @@ fun greeting(
         // Save snapshot for undo
         val validMove: Boolean = move.to.isValid()
         if (validMove) {
-        val moveResult = applyMove(board, move)
+        val moveResult: MoveResult = applyMove(board, move)
         board = moveResult.newBoard
     } else {
             ShowMessage(context, "in valid move $move.to.notation")
@@ -295,17 +307,18 @@ fun greeting(
     Button(
         onClick = {
             var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
-            var piece: Piece? = null
+            var _piece: Piece? = null
             dadu = 1
             for (k in board) {
                 for (i in board[k]) {
-                    _piece = board[k][i]
-                    if (_piece.player == currentPlayer) {
-                        piece = _piece
+                    var __piece = board[k][i]
+                    if (__piece.player == currentPlayer) {
+                        _piece = __piece
                     }
                 }
             }
-            if (piece != null) {
+            val piece = _piece
+            if (piece != null && dadu != null) {
                 val from: Position = piece.position
                 val to: Position = from.copy(row = from.row + dadu)
                 val move: Move = Move(from = from, to = to, player = currentPlayer)
@@ -388,14 +401,8 @@ fun PieceToken(
     }
 }
 
-data class Move(
-    val from: Position,
-    val to: Position,
-    val player: PlayerPiece
-)
-
 fun applyMove(
-        board: Map<Position, <MutableList<Piece>>,
+        board: Map<Position, <MutableList<Piece>>>,
         move: Move
     ): MoveResult {
         val newBoard = board.toMutableMap()
@@ -427,9 +434,4 @@ fun applyMove(
             newBoard = newBoard
         )
 }
-
-data class MoveResult(
-        val newBoard: Map<Position, Piece>
-    )
-
 
