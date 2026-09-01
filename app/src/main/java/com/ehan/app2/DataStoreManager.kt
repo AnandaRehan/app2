@@ -33,7 +33,7 @@ class DataStoreManager(private val context: Context) {
         context.dataStore.edit { preferences ->
             preferences[USER_NAME_KEY] = name
         }
-    }
+    }/**
 
     suspend fun getData(name: String) {
         val KEY = when (name) {
@@ -51,5 +51,5 @@ class DataStoreManager(private val context: Context) {
                 preferences[KEY] ?: null
             }
         }
-    }
+    }*/
 }

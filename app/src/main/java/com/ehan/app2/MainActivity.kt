@@ -10,6 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 /**
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,6 +25,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+*/
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+/**
 import androidx.compose.foundation.layout.systemBarsPadding
 */
 import androidx.compose.material3.*
@@ -41,7 +50,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+*/
 import androidx.compose.runtime.saveable.rememberSaveable
+/**
 import androidx.compose.runtime.setValue
 */
 import androidx.compose.ui.Alignment
@@ -134,7 +145,7 @@ data class Position(val row: Int, val col: Int) {
 data class Piece(
     val player: PlayerPiece
 )
-
+/**
 data class Move(
     val from: Position,
     val to: Position
@@ -145,7 +156,7 @@ data class Move(
             val promo = if (isPromotion) " [DAM!]" else ""
             return "${from.notation}$sep${to.notation}$promo"
         }
-}
+}*/
 
 @Composable
 fun greeting(
@@ -154,6 +165,7 @@ fun greeting(
     val context: Context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val boardBorderColor = Color(0xFF5D4037)
     var board by rememberSaveable { mutableStateOf(createInitialBoard()) }
     var dadu: Int? by rememberSaveable { mutableStateOf<Int?>(null) }
 /**
@@ -279,8 +291,8 @@ fun PieceToken(
     val isP1 = piece.player == PlayerPiece.PLAYER_1
   //  val baseColor = if (isP1) Color(pieceTheme.p1Color) else Color(pieceTheme.p2Color)
    // val accentColor = if (isP1) Color(pieceTheme.p1Accent) else Color(pieceTheme.p2Accent)
-    val baseColor = 0xFFDC2626
-    val baseColor = 0xFFFEF2F2
+    val baseColor = Color(0xFFDC2626)
+    val baseColor = Color(0xFFFEF2F2)
 
     Box(
         modifier = modifier
