@@ -223,6 +223,7 @@ fun greeting(
             val colRange = (7 downTo 0)
             val jalan = (0..3)
             for (r in jalan) {
+                val c = 0
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -340,7 +341,7 @@ fun PieceToken(
         // Inner concentric tactile ring
         Box(
             modifier = Modifier
-                .fillMaxSize(0.72f),
+                .fillMaxSize(0.72f)
                 .border(1.5.dp, accentColor.copy(alpha = 0.35f), CircleShape)
                 .clip(CircleShape),
             contentAlignment = Alignment.Center
