@@ -8,13 +8,13 @@ enum class PlayerPiece(val displayName: String, val shortName: String) {
 }
 
 data class Position(val row: Int, val col: Int) {
-    fun isValid(): Boolean = row in 0..3 && col == 0
+    fun isValid(): Boolean = row in 0..7 && col in 0..7
     fun isDarkSquare(): Boolean = (row + col) % 2 == 1
 
     val notation: String
         get() {
             val colChar = ('A' + col)
-            val rowNum = 4 - row
+            val rowNum = 8 - row
             return "$colChar$rowNum"
         }
 }
