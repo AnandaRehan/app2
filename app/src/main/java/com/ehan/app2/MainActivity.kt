@@ -18,17 +18,21 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 // import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.*
-/**
+// import androidx.compose.material3.*
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -37,7 +41,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-*/
+
 import androidx.compose.runtime.*
 /**
 import androidx.compose.runtime.collectAsState
@@ -229,7 +233,7 @@ fun greeting(
                     val squareColor = Color(0xFFF0D9B5)
 
                     val pos = Position(r, 0)
-                    val piece = board[pos]
+                    val pieces = board[pos]
                     Box(
                         modifier = Modifier
                                 .weight(1f)
@@ -238,10 +242,10 @@ fun greeting(
                                 .testTag("square_${pos.row}_${pos.col}"),
                             contentAlignment = Alignment.Center
                     ) {
-                        if (piece?.isNotEmpty()) {
-                            for (p in piece)
+                        if (!pieces.isNullOrEmpty()) {
+                            for (i in pieces.indices)
                                 PieceToken(
-                                    piece = p,
+                                    piece = pieces[i],
                                     modifier = Modifier.padding(4.dp)
                                 )
                         }
