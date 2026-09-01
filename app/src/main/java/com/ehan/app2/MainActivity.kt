@@ -292,7 +292,7 @@ fun greeting(
                                 )
                             }
                             
-                        if (!pieces.isNullOrEmpty()) {
+                        if (!pieces?.isNullOrEmpty()) {
                             for (i in pieces.indices) {
                                 PieceToken(
                                     piece = pieces[i],
@@ -406,7 +406,7 @@ fun applyMove(
         move: Move
     ): MoveResult {
         val newBoard = board.toMutableMap()
-        if (newBoard[move.from]?.isNotEmpty() != true) {
+        if (!(newBoard[move.from] is MutableList<Piece>>) || newBoard[move.from].isEmpty()) {
             return MoveResult(board)
         }
         var _piece: Piece
@@ -420,9 +420,9 @@ fun applyMove(
         // Remove captured pieces
         
         // Check for promotion (crowned as Dam / King)
-        
+
         val updatedPiece = piece
-    if (!newBoard[move.to]?.isNullOrEmpty()) {
+    if (newBoard[move.to] is MutableList<Piece>>) {
         newBoard[move.to].add(updatedPiece)
     } else {
         newBoard[move.to] = mutableListOf(updatedPiece)
