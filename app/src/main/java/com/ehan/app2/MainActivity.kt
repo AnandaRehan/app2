@@ -242,7 +242,7 @@ fun greeting(
                                 .testTag("square_${pos.row}_${pos.col}"),
                             contentAlignment = Alignment.Center
                     ) {
-                        if (piece?.[0] != null) {
+                        if (piece.isNotEmpty()) {
                             for (p in piece)
                                 PieceToken(
                                     piece = p,
@@ -288,11 +288,11 @@ fun PieceToken(
    // isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val isP1 = piece.player == PlayerPiece.PLAYER_1
+    val isP1: Boolean = piece.player == PlayerPiece.PLAYER_1
   //  val baseColor = if (isP1) Color(pieceTheme.p1Color) else Color(pieceTheme.p2Color)
    // val accentColor = if (isP1) Color(pieceTheme.p1Accent) else Color(pieceTheme.p2Accent)
-    val baseColor = Color(0xFFDC2626)
-    val baseColor = Color(0xFFFEF2F2)
+    val baseColor: Color = Color(0xFFDC2626)
+    val accentColor: Color = Color(0xFFFEF2F2)
 
     Box(
         modifier = modifier
@@ -313,7 +313,7 @@ fun PieceToken(
         // Inner concentric tactile ring
         Box(
             modifier = Modifier
-                .fillMaxSize(0.72f)
+                .fillMaxSize(0.72f),
             contentAlignment = Alignment.Center
         ) {
             
