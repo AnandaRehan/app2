@@ -84,7 +84,6 @@ import kotlinx.coroutines.launch
 import com.ehan.app2.ui.theme.App2Theme
 import com.ehan.app2.engine.GameEngine
 import com.ehan.app2.model.Move
-import com.ehan.app2.model.MoveResult
 import com.ehan.app2.model.Piece
 import com.ehan.app2.model.PlayerPiece
 import com.ehan.app2.model.Position

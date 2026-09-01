@@ -29,7 +29,3 @@ data class Move(
     val to: Position,
     val player: PlayerPiece
 )
-
-data class MoveResult(
-    val newBoard: Map<Position, MutableList<Piece>>
-)
