@@ -148,7 +148,7 @@ data class Move(
 )
 
 data class MoveResult(
-        val newBoard: Map<Position, Piece>
+        val newBoard: Map<Position, MutableList<Piece>>
     )
 
 
@@ -222,8 +222,8 @@ fun greeting(
         // Save snapshot for undo
         val validMove: Boolean = move.to.isValid()
         if (validMove) {
-        val moveResult: MoveResult = applyMove(board, move)
-        board = moveResult.newBoard
+            val moveResult: MoveResult = applyMove(board, move)
+            board = moveResult.newBoard
     } else {
             ShowMessage(context, "in valid move $move.to.notation")
     }
