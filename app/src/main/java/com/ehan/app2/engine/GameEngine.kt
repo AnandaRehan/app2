@@ -7,11 +7,10 @@ import com.ehan.app2.model.PlayerPiece
 import com.ehan.app2.model.Position
 
 object GameEngine {
-    fun createInitialBoard(): Map<Position, MutableList<Piece>> {
-        val board = mutableMapOf<Position, MutableList<Piece>>()
+    fun createInitialBoard(): Map<Position, Piece> {
+        val board = mutableMapOf<Position, Piece>()
         val pos = Position(0, 0)
-        val p = mutableListOf(Piece(PlayerPiece.PLAYER_1, pos), Piece(PlayerPiece.PLAYER_2), pos)
-        board[pos] = p
+        board[pos] = Piece(player = PlayerPiece.PLAYER_1, position = pos)
         return board
     }
     
@@ -46,5 +45,16 @@ object GameEngine {
         return MoveResult(
            newBoard = newBoard
         )
+    }
+
+    fun getPieces(
+        board: Map<Position, Piece>
+    ): Map<PlayerPiece, Piece> {
+        val pieces = mutableMapOf<PlayerPiece, Piece>()
+        for (pos in board) {
+            val piece = board[pos]
+            pieces[piece.player] = piece
+        }
+        return pieces
     }
 }

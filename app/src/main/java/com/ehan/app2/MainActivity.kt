@@ -161,105 +161,94 @@ fun greeting(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(8.dp)
-            .shadow(16.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
-            .background(boardBorderColor)
-            .padding(10.dp)
-            .testTag("checkers_board")
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            val rowRange = (7 downTo 0)
-            val colRange = (7 downTo 0)
-            val jalan = (0..3)
-            for (r in jalan) {
-                val c = 0
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    val pos = Position(r, 0)
-                    val isDark = pos.isDarkSquare()
-                    val squareColor = if (isDark) darkSquareColor else lightSquareColor
-                    
-                    val pieces = board[pos]
-                    Box(
-                        modifier = Modifier
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .padding(8.dp)
+                .shadow(16.dp, RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp))
+                .background(boardBorderColor)
+                .padding(10.dp)
+                .testTag("checkers_board")
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                val rowRange = (7 downTo 0)
+                val colRange = (7 downTo 0)
+                for (r in rowRange) {
+                    for (c in colRange) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .weight(1f)
-                                .fillMaxHeight()
-                                .background(squareColor)
-                                .testTag("square_${pos.row}_${pos.col}"),
-                            contentAlignment = Alignment.Center
-                    ) {
-                        if (r == 7) {
-                                Text(
-                                    text = ('A' + c).toString(),
-                                    fontSize = 9.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = lightSquareColor.copy(alpha = 0.5f),
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(2.dp)
-                                )
-                            }
-                            if (c == 7 || c == 0) {
-                                Text(
-                                    text = (8 - r).toString(),
-                                    fontSize = 9.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = lightSquareColor.copy(alpha = 0.5f),
-                                    modifier = Modifier
-                                        .align(Alignment.TopStart)
-                                        .padding(2.dp)
-                                )
-                            }
-                            
-                        if (pieces is MutableList<Piece>) {
-                            for (i in pieces.indices) {
-                                PieceToken(
-                                    piece = pieces[i],
-                                    modifier = Modifier.padding(4.dp)
-                                )
-                        }}
-                    }
-                }
-            }
-        }
-    }
-    Button(
-        onClick = {
-            var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
-            var _piece: Piece? = null
-            dadu = 1
-            for (k in board) {
-                if (board[k] is MutableList<Piece>) {
-                    for (i in board[k]) {
-                        var __piece = board[k][i]
-                        if (__piece is Piece) {
-                            if (__piece.player == currentPlayer) {
-                                _piece = __piece
+                        ) {
+                            val pos = Position(r, 0)
+                            val isDark = pos.isDarkSquare()
+                            val squareColor = if (isDark) darkSquareColor else lightSquareColor
+                    
+                            val piece = board[pos]
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .background(squareColor)
+                                    .testTag("square_${pos.row}_${pos.col}"),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (r == 7) {
+                                    Text(
+                                        text = ('A' + c).toString(),
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = lightSquareColor.copy(alpha = 0.5f),
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(2.dp)
+                                    )
+                                }
+                                if (c == 7 || c == 0) {
+                                    Text(
+                                        text = (8 - r).toString(),
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = lightSquareColor.copy(alpha = 0.5f),
+                                        modifier = Modifier
+                                            .align(Alignment.TopStart)
+                                            .padding(2.dp)
+                                    )
+                                }
+        
+                                if (piece is Piece) {
+                                
+                                    PieceToken(
+                                        piece = piece,
+                                        modifier = Modifier.padding(4.dp)
+                                    )
+                                
+                                }
                             }
                         }
                     }
                 }
             }
-            val piece = _piece
-            if (piece != null && dadu != null) {
-                val from: Position = piece.position
-                val to: Position = from.copy(row = from.row + dadu)
-                handleMove(Move(from = from, to = to, player = currentPlayer))
-            } else {
-                ShowMessage(context, "null")
-            }
         }
-    ) {
-        Text(text = dadu.toString())
-    }
+        Button(
+            onClick = {
+                var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
+                val pieces = GameEngine.getPieces(board)
+                val piece: Piece? = pieces[currentPlayer]
+                dadu = 1
+                if (piece != null && dadu != null) {
+                    val from: Position = piece.position
+                    val to: Position = from.copy(row = from.row + dadu)
+                    handleMove(Move(from = from, to = to, player = piece.player))
+                } else {
+                    ShowMessage(context, "null")
+                }
+            }
+        ) {
+            Text(text = dadu.toString())
+        }
     }
 }
 
@@ -303,14 +292,12 @@ fun PieceToken(
                 .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            
                 // Small inner dot for clean checker token look
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .background(accentColor.copy(alpha = 0.45f))
-                )
-            
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(accentColor.copy(alpha = 0.45f))
+            )
         }
     }
 }
