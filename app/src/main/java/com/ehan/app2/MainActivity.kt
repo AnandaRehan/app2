@@ -146,7 +146,7 @@ fun greeting(
     val highlightColor: Color = Color(0xFFFFD54F)
 
     var board by rememberSaveable { mutableStateOf(GameEngine.createInitialBoard()) }
-    var dadu: Int? by rememberSaveable { mutableStateOf<Int?>(null) }
+    var dadu: Int by rememberSaveable { mutableStateOf(0) }
 
     fun handleMove(move: Move) {
         if (move.to.isValid() == true) {

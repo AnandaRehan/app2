@@ -48,12 +48,13 @@ object GameEngine {
         board: Map<Position, Piece>
     ): Map<PlayerPiece, Piece> {
         val pieces = mutableMapOf<PlayerPiece, Piece>()
-        for (pos in board) {
-            val piece = board[pos]
+        for ((pos, piece) in board) {
             pieces[piece.player] = piece
         }
+    
         return pieces
     }
+
 
     data class MoveResult(
         val newBoard: Map<Position, Piece>
