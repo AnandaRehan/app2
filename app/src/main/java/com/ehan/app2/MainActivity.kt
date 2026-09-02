@@ -167,18 +167,6 @@ fun greeting(
         }
     }
 
-    var aint: Int = 0
-    var bint: Int = 0
-
-    for (i in 0..4) {
-        aint++
-    }
-    showMessage("(i in 0..4) $aint kali")
-    for (i in 1..4) {
-        bint++
-    }
-    showMessage("(i in 1..4) $bint kali")
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -272,9 +260,7 @@ fun greeting(
             onClick = {
                 if (dadu <= 0) {
                     dadu = Random.nextInt(1, 7)
-                    if (dadu <= 1 || dadu >= 6) {
-                        showMessage("Dadu $dadu")
-                    }
+                    showMessage("Dadu $dadu")
                 }
             }
         ) {
