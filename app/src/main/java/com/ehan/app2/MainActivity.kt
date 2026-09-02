@@ -151,6 +151,9 @@ fun greeting(
     var board by rememberSaveable { mutableStateOf(GameEngine.createInitialBoard()) }
     var dadu: Int by rememberSaveable { mutableStateOf(0) }
     var currentDadu: Int by rememberSaveable { mutableStateOf(0) }
+    var currentPlayer: PlayerPiece by rememberSaveable { mutableStateOf(PlayerPiece.PLAYER_1) }
+    var onRun: Boolean by rememberSaveable { mutableStateOf(false) }
+    var finishRun: Boolean by rememberSaveable { mutableStateOf(false) }
 
     fun showMessage(
         text: String = "",
@@ -196,8 +199,9 @@ fun greeting(
                             val pos = Position(r, c)
                             val isDark = pos.isDarkSquare()
                             val squareColor = if (isDark) darkSquareColor else lightSquareColor
-                    
-                            val piece = board[pos]
+
+                            val pieces = board[pos]
+                            
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
@@ -206,11 +210,16 @@ fun greeting(
                                     .testTag("square_${pos.row}_${pos.col}"),
                                 contentAlignment = Alignment.Center
                             ) {
-                                if (piece != null && piece is Piece) {
-                                    PieceToken(
-                                        piece = piece,
-                                        modifier = Modifier.padding(4.dp)
-                                    )
+                                if (pieces is List<Piece>) {
+                                    for (piece in pieces) {
+                                        if (piece != null && piece is Piece) {
+                                            PieceToken(
+                                                piece = piece,
+                                                modifier = Modifier
+                                                .padding(4.dp)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -218,33 +227,66 @@ fun greeting(
                 }
             }
         }
-        if (dadu > 0) {
-            dadu--
-            var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
-            val pieces = GameEngine.getPieces(board)
-            val piece: Piece? = pieces[currentPlayer]
-            if (piece != null && piece is Piece) {
-                val nextMove: Move = GameEngine.getNextMove(piece)
-                if (nextMove.to.isValid() != true) {
-                    dadu = 0
-                    showMessage("move invalid " + nextMove.to.notation)
+        if (onRun) {
+            if (dadu > 0) {
+                dadu--
+                val pieces = GameEngine.getPieces(board)
+                val piece: Piece? = pieces[currentPlayer]
+                if (piece != null && piece is Piece) {
+                    val nextMove: Move = GameEngine.getNextMove(piece)
+                    if (nextMove.to.isValid() != true) {
+                        dadu = 0
+                        finishRun = true
+                        showMessage("move invalid " + nextMove.to.notation)
+                    } else {
+                        handleMove(nextMove)
+                    }
                 } else {
-                    handleMove(nextMove)
+                    dadu = 0
+                    finishRun = true
                 }
             } else {
-                dadu = 0
+                finishRun = true
             }
         }
-        Button(
-            onClick = {
-                if (dadu <= 0) {
-                    dadu = Random.nextInt(1, 7)
-                    currentDadu = dadu
+        if (finishRun) {
+            onRun = false
+            currentPlayer = currentPlayer.opponent()
+            finishRun = false
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = {
+                    if (onRun != true) {
+                        dadu = Random.nextInt(1, 7)
+                        currentDadu = dadu
+                        onRun = true
+                        finishRun = false
+                    }
+                    refreshScreen()
                 }
-                refreshScreen()
+            ) {
+                Text(text = currentDadu.toString())
             }
-        ) {
-            Text(text = currentDadu.toString())
+
+            Text(text = currentPlayer.displayName)
+        }
+        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            Button(
+                onClick = {
+                    if (onRun != true) {
+                        dadu = Random.nextInt(1, 7)
+                        currentDadu = dadu
+                        onRun = true
+                        finishRun = false
+                    }
+                    refreshScreen()
+                }
+            ) {
+                Text(text = currentDadu.toString())
+            }
+
+            Text(text = currentPlayer.displayName)
         }
     }
 }
@@ -257,10 +299,8 @@ fun PieceToken(
     modifier: Modifier = Modifier
 ) {
     val isP1: Boolean = piece.player == PlayerPiece.PLAYER_1
-  //  val baseColor = if (isP1) Color(pieceTheme.p1Color) else Color(pieceTheme.p2Color)
-   // val accentColor = if (isP1) Color(pieceTheme.p1Accent) else Color(pieceTheme.p2Accent)
-    val baseColor: Color = Color(0xFFDC2626)
-    val accentColor: Color = Color(0xFFFEF2F2)
+    val baseColor: Color = if (isP1) Color(0xFFDC2626) else Color(0xFF1E293B)
+    val accentColor: Color = if (isP1) Color(0xFFFEF2F2) else Color(0xFFF1F5F9)
 
     val elevation = 4.dp
     Box(

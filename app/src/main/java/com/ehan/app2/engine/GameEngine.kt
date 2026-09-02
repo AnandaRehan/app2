@@ -6,52 +6,63 @@ import com.ehan.app2.model.PlayerPiece
 import com.ehan.app2.model.Position
 
 object GameEngine {
-    fun createInitialBoard(): Map<Position, Piece> {
-        val board = mutableMapOf<Position, Piece>()
+    fun createInitialBoard(): Map<Position, List<Piece>> {
+        val board = mutableMapOf<Position, List<Piece>>()
         val pos = Position(0, 7)
-        board[pos] = Piece(player = PlayerPiece.PLAYER_1, position = pos)
+        val pieces = listOf<Piece>(
+            Piece(player = PlayerPiece.PLAYER_1, position = pos),
+            Piece(player = PlayerPiece.PLAYER_2, position = pos)
+        )
+        board[pos] = pieces
         return board
     }
     
     fun applyMove(
-        board: Map<Position, Piece>,
+        board: Map<Position, List<Piece>>,
         move: Move
     ): MoveResult {
         val newBoard = board.toMutableMap()
-       /** if (!(newBoard[move.from] is MutableList<Piece>>) || newBoard[move.from].isEmpty()) {
-            return MoveResult(
-                newBoard = board
-            )
-        }*/
-        val piece = newBoard.remove(move.from) ?: return MoveResult(board)
-        /**
-        var _piece: Piece
-        for (i in newBoard[move.from].indices) {
-            val piece = newBoard[move.from][i]
-            if (move.player == piece.player) {
-                _piece = newBoard[move.from].removeAt(i)
+        val pieces = board[move.from]?.toMutableList() ?: return MoveResult(board)
+
+        var _piece: Piece? = null
+        var i: Int = 0
+        if (pieces is List<Piece>) {
+            cariPiece@ for (index in pieces.indices) {
+                val piece = pieces[i]
+                if (piece.player == move.player) {
+                    i = index
+                    _piece = pieces.removeAt[i]
+                    break@cariPiece
+                }
             }
         }
-        val piece = _piece.copy(position = move.to)*/
-        // Remove captured pieces
-        
-        // Check for promotion (crowned as Dam / King)
+        if (_piece == null) {
+            return MoveResult(board)
+        }
+        newBoard[move.from] = pieces
+        val piece = _piece
 
         val updatedPiece = piece.copy(position = move.to)
-        newBoard[move.to] = updatedPiece
+        if (newBoard[move.to] is List<Piece>) {
+            newBoard[move.to].add(updatedPiece)
+        } else {
+            newBoard[move.to] = listOf<Piece>(updatedPiece)
+        }
+
         return MoveResult(
            newBoard = newBoard
         )
     }
 
     fun getPieces(
-        board: Map<Position, Piece>
+        board: Map<Position, List<Piece>>
     ): Map<PlayerPiece, Piece> {
         val pieces = mutableMapOf<PlayerPiece, Piece>()
-        for ((pos, piece) in board) {
-            pieces[piece.player] = piece
+        for ((pos, _pieces) in board) {
+            for (piece in _pieces) {
+                pieces[piece.player] = piece
+            }
         }
-    
         return pieces
     }
 
@@ -80,6 +91,6 @@ object GameEngine {
     }
 
     data class MoveResult(
-        val newBoard: Map<Position, Piece>
+        val newBoard: Map<Position, List<Piece>>
     )
 }
