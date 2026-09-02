@@ -231,8 +231,7 @@ fun greeting(
                                             .padding(2.dp)
                                     )
                                 }
-                                showMessage("piece is Piece == " + (piece is Piece).toString())
-                                if (piece is Piece) {
+                                if (piece != null && piece is Piece) {
                                     PieceToken(
                                         piece = piece,
                                         modifier = Modifier.padding(4.dp)
