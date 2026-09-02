@@ -26,7 +26,7 @@ object GameEngine {
 
         var _piece: Piece? = null
         var i: Int = 0
-        if (pieces is List<Piece>) {
+        if (pieces != null && pieces is List<Piece>) {
             cariPiece@ for (index in pieces.indices) {
                 val piece = pieces[i]
                 if (piece.player == move.player) {
@@ -43,7 +43,7 @@ object GameEngine {
         val piece = _piece
 
         val updatedPiece = piece.copy(position = move.to)
-        if (newBoard[move.to] is List<Piece>) {
+        if (newBoard[move.to] != null && newBoard[move.to] is List<Piece>) {
             val pieces = newBoard[move.to].toMutableList()
             pieces.add(updatedPiece)
             newBoard[move.to] = pieces

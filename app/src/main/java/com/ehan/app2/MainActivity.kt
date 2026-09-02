@@ -210,7 +210,7 @@ fun greeting(
                                     .testTag("square_${pos.row}_${pos.col}"),
                                 contentAlignment = Alignment.Center
                             ) {
-                                if (pieces is List<Piece>) {
+                                if (pieces != null && pieces is List<Piece>) {
                                     for (piece in pieces) {
                                         if (piece != null && piece is Piece) {
                                             PieceToken(
