@@ -67,7 +67,10 @@ object GameEngine {
         piece: Piece
     ): Move {
         val from: Position = piece.position
-        val to: Position = from.copy(col = if (from.row % 2 == 0) { from.col + 1 } else { from.col - 1 })
+        var to: Position = from.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
+        if (to.isValid() != true) {
+            to = from.copy(row = from.row + 1)
+        }
         return Move(
             from = from,
             to = to,
