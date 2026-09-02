@@ -141,6 +141,8 @@ fun greeting(
     val context: Context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val refreshScreenManual: Boolean by rememberSaveable { mutableStateOf(false) }
+
     val boardBorderColor: Color = Color(0xFF5D4037)
     val lightSquareColor: Color = Color(0xFFF0D9B5)
     val darkSquareColor: Color = Color(0xFFB58863)
@@ -157,6 +159,9 @@ fun greeting(
             context = c,
             text = text
         )
+    }
+    fun refreshScreen() {
+        refreshScreenManual = !refreshScreenManual
     }
     fun handleMove(move: Move) {
         if (move.to.isValid() == true) {
@@ -262,6 +267,7 @@ fun greeting(
                     dadu = Random.nextInt(1, 7)
                     showMessage("Dadu $dadu")
                 }
+                refreshScreen()
             }
         ) {
             Text(text = dadu.toString())
