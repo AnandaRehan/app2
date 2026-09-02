@@ -175,12 +175,12 @@ fun greeting(
                 val rowRange = (7 downTo 0)
                 val colRange = (7 downTo 0)
                 for (r in rowRange) {
-                    for (c in colRange) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        for (c in colRange) {
                             val pos = Position(r, c)
                             val isDark = pos.isDarkSquare()
                             val squareColor = if (isDark) darkSquareColor else lightSquareColor
@@ -216,8 +216,8 @@ fun greeting(
                                             .padding(2.dp)
                                     )
                                 }
+                                ShowMessage(context, "piece is Piece == " + (piece is Piece).toString())
                                 if (piece != null) {
-                                    ShowMessage(context, "piece is Piece == " + (piece is Piece).toString())
                                     PieceToken(
                                         piece = piece,
                                         modifier = Modifier.padding(4.dp)
