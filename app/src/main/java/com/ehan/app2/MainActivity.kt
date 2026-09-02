@@ -151,10 +151,10 @@ fun greeting(
 
     fun showMessage(
         text: String = "",
-        context: Context = context
+        c: Context = context
     ) {
         ShowMessage(
-            context = context,
+            context = c,
             text = text
         )
     }
@@ -271,7 +271,10 @@ fun greeting(
         Button(
             onClick = {
                 if (dadu <= 0) {
-                    dadu = Random.nextInt(1..6)
+                    dadu = Random.nextInt(1, 7)
+                    if (dadu <= 1 || dadu >= 6) {
+                        showMessage("Dadu $dadu")
+                    }
                 }
             }
         ) {
