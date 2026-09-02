@@ -164,12 +164,8 @@ fun greeting(
         refreshScreenManual = !refreshScreenManual
     }
     fun handleMove(move: Move) {
-        if (move.to.isValid() == true) {
-            val result = GameEngine.applyMove(board, move)
-            board = result.newBoard
-        } else {
-            ShowMessage(context, "in valid move $move.to.notation")
-        }
+        val result = GameEngine.applyMove(board, move)
+        board = result.newBoard
     }
 
     Column(

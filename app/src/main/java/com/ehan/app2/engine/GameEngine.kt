@@ -37,7 +37,7 @@ object GameEngine {
         
         // Check for promotion (crowned as Dam / King)
 
-        val updatedPiece = piece
+        val updatedPiece = piece.copy(position = move.to)
         newBoard[move.to] = updatedPiece
         return MoveResult(
            newBoard = newBoard
