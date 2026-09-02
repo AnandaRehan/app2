@@ -8,7 +8,7 @@ import com.ehan.app2.model.Position
 object GameEngine {
     fun createInitialBoard(): Map<Position, Piece> {
         val board = mutableMapOf<Position, Piece>()
-        val pos = Position(7, 0)
+        val pos = Position(0, 7)
         board[pos] = Piece(player = PlayerPiece.PLAYER_1, position = pos)
         return board
     }
