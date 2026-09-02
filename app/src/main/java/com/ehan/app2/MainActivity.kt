@@ -259,33 +259,28 @@ fun greeting(
                 onClick = {
                     if (onRun != true) {
                         dadu = Random.nextInt(1, 7)
-                        currentDadu = dadu
-                        onRun = true
-                        finishRun = false
+                        val pieces = GameEngine.getPieces(board)
+                        val piece: Piece? = pieces[currentPlayer]
+                        if (piece != null && piece is Piece) {
+                            val moves: Move = GameEngine.getMove(piece)
+                            if (moves.to.isValid() == true) {
+                                currentDadu = dadu
+                                onRun = true
+                                finishRun = false
+                            } else {
+                                dadu = 0
+                                currentPlayer = currentPlayer.opponent()
+                            }
+                        } else {
+                            dadu = 0
+                            currentPlayer = currentPlayer.opponent()
+                        }
                     }
                     refreshScreen()
                 }
             ) {
                 Text(text = currentDadu.toString())
             }
-
-            Text(text = currentPlayer.displayName)
-        }
-        Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
-            Button(
-                onClick = {
-                    if (onRun != true) {
-                        dadu = Random.nextInt(1, 7)
-                        currentDadu = dadu
-                        onRun = true
-                        finishRun = false
-                    }
-                    refreshScreen()
-                }
-            ) {
-                Text(text = currentDadu.toString())
-            }
-
             Text(text = currentPlayer.displayName)
         }
     }
