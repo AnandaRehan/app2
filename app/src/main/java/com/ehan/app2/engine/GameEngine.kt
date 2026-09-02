@@ -63,8 +63,8 @@ object GameEngine {
         var _to: Position = piece.position
         for (i in 1..length) {
             _to = _to.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
-            if (to.isValid() != true) {
-                to = from.copy(row = from.row + 1)
+            if (_to.isValid() != true) {
+                _to = from.copy(row = from.row + 1)
             }
         }
         val to: Position = _to
