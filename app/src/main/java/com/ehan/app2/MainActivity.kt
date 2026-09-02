@@ -168,22 +168,16 @@ fun greeting(
     }
 
     var aint: Int = 0
-    var aaint = mutableListOf()
     var bint: Int = 0
-    var bbint = mutableListOf()
 
-    for (i in 4) {
+    for (i in 0..4) {
         aint++
-        aaint.add(i)
     }
-    showMessage("(i in 4) $aint kali")
-    showMessage("aaint == ${aaint.toString()}")
+    showMessage("(i in 0..4) $aint kali")
     for (i in 1..4) {
         bint++
-        bbint.add(i)
     }
     showMessage("(i in 1..4) $bint kali")
-    showMessage("bbint == ${bbint.toString()}")
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -245,7 +239,7 @@ fun greeting(
                                     )
                                 }
                                 showMessage("piece is Piece == " + (piece is Piece).toString())
-                                if (piece != null) {
+                                if (piece is Piece) {
                                     PieceToken(
                                         piece = piece,
                                         modifier = Modifier.padding(4.dp)
@@ -262,13 +256,16 @@ fun greeting(
             var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
             val pieces = GameEngine.getPieces(board)
             val piece: Piece? = pieces[currentPlayer]
-
-            val nextMove: Move = GameEngine.getNextMove(piece)
-            if (nextMove.to.isValid() != true) {
-                dadu = 0
-                showMessage("move invalid " + nextMove.to.notation)
+            if (piece != null && piece is Piece) {
+                val nextMove: Move = GameEngine.getNextMove(piece)
+                if (nextMove.to.isValid() != true) {
+                    dadu = 0
+                    showMessage("move invalid " + nextMove.to.notation)
+                } else {
+                    handleMove(nextMove)
+                }
             } else {
-                handleMove(Move(from = from, to = to, player = piece.player))
+                dadu = 0
             }
         }
         Button(
