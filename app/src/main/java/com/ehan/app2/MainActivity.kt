@@ -216,9 +216,15 @@ fun greeting(
                                             .padding(2.dp)
                                     )
                                 }
-        
+                                if (piece != null) {
+                                    ShowMessage(context, "piece bukan null")
+                                    ShowMessage(context, piece?.position?.notation ?: "gaada piece.position.notation")
+                                    ShowMessage(context, piece?.position?.toString() ?: "gaada piece.position.toString()")
+                                    ShowMessage(context, piece?.toString() ?: "gaada piece.toString()")
+                                } else {
+                                    Text(text = "null")
+                                }
                                 if (piece is Piece) {
-                                
                                     PieceToken(
                                         piece = piece,
                                         modifier = Modifier.padding(4.dp)
