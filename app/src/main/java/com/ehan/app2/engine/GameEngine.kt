@@ -66,7 +66,7 @@ object GameEngine {
             if (_to.isValid() == true) {
                 _to = __to
             } else {
-                _to = _to.copy(row = from.row + 1)
+                _to = _to.copy(row = _to.row + 1)
             }
         }
         val to: Position = _to
