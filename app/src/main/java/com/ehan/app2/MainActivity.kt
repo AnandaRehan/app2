@@ -205,28 +205,6 @@ fun greeting(
                                     .testTag("square_${pos.row}_${pos.col}"),
                                 contentAlignment = Alignment.Center
                             ) {
-                                if (r == 7) {
-                                    Text(
-                                        text = ('A' + c).toString(),
-                                        fontSize = 9.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = lightSquareColor.copy(alpha = 0.5f),
-                                        modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .padding(2.dp)
-                                    )
-                                }
-                                if (c == 7 || c == 0) {
-                                    Text(
-                                        text = (8 - r).toString(),
-                                        fontSize = 9.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = lightSquareColor.copy(alpha = 0.5f),
-                                        modifier = Modifier
-                                            .align(Alignment.TopStart)
-                                            .padding(2.dp)
-                                    )
-                                }
                                 if (piece != null && piece is Piece) {
                                     PieceToken(
                                         piece = piece,
@@ -261,6 +239,16 @@ fun greeting(
                 if (dadu <= 0) {
                     dadu = Random.nextInt(1, 7)
                     showMessage("Dadu $dadu")
+                    if (refreshScreenManual == true) {
+                        var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
+                        val pieces = GameEngine.getPieces(board)
+                        val piece: Piece? = pieces[currentPlayer]
+                        if (piece != null && piece is Piece) {
+                            val getMove: Move = GameEngine.getMove(piece, dadu)
+                            handleMove(getMove)
+                            dadu = 0
+                        }
+                    }
                 }
                 refreshScreen()
             }
