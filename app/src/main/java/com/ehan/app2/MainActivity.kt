@@ -181,7 +181,7 @@ fun greeting(
                                 .fillMaxWidth()
                                 .weight(1f)
                         ) {
-                            val pos = Position(r, 0)
+                            val pos = Position(r, c)
                             val isDark = pos.isDarkSquare()
                             val squareColor = if (isDark) darkSquareColor else lightSquareColor
                     
@@ -217,19 +217,13 @@ fun greeting(
                                     )
                                 }
                                 if (piece != null) {
-                                    ShowMessage(context, "piece bukan null")
-                                    ShowMessage(context, piece?.position?.notation ?: "gaada piece.position.notation")
-                                    ShowMessage(context, piece?.position?.toString() ?: "gaada piece.position.toString()")
-                                    ShowMessage(context, piece?.toString() ?: "gaada piece.toString()")
-                                } else {
-                                    Text(text = "null")
-                                }
-                                if (piece is Piece) {
+                                    ShowMessage(context, "piece is Piece == " + (piece is Piece).toString())
                                     PieceToken(
                                         piece = piece,
                                         modifier = Modifier.padding(4.dp)
                                     )
-                                
+                                } else {
+                                    Text(text = "null")
                                 }
                             }
                         }
