@@ -31,7 +31,7 @@ object GameEngine {
                 val piece = pieces[i]
                 if (piece.player == move.player) {
                     i = index
-                    _piece = pieces.removeAt[i]
+                    _piece = pieces.removeAt(i)
                     break@cariPiece
                 }
             }
@@ -44,7 +44,9 @@ object GameEngine {
 
         val updatedPiece = piece.copy(position = move.to)
         if (newBoard[move.to] is List<Piece>) {
-            newBoard[move.to].add(updatedPiece)
+            val pieces = newBoard[move.to].toMutableList()
+            pieces.add(updatedPiece)
+            newBoard[move.to] = pieces
         } else {
             newBoard[move.to] = listOf<Piece>(updatedPiece)
         }
