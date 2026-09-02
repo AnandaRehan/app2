@@ -150,6 +150,7 @@ fun greeting(
 
     var board by rememberSaveable { mutableStateOf(GameEngine.createInitialBoard()) }
     var dadu: Int by rememberSaveable { mutableStateOf(0) }
+    var currentDadu: Int by rememberSaveable { mutableStateOf(0) }
 
     fun showMessage(
         text: String = "",
@@ -238,22 +239,12 @@ fun greeting(
             onClick = {
                 if (dadu <= 0) {
                     dadu = Random.nextInt(1, 7)
-                    showMessage("Dadu $dadu")
-                    if (refreshScreenManual == true) {
-                        var currentPlayer: PlayerPiece = PlayerPiece.PLAYER_1
-                        val pieces = GameEngine.getPieces(board)
-                        val piece: Piece? = pieces[currentPlayer]
-                        if (piece != null && piece is Piece) {
-                            val getMove: Move = GameEngine.getMove(piece, dadu)
-                            handleMove(getMove)
-                            dadu = 0
-                        }
-                    }
+                    currentDadu = dadu
                 }
                 refreshScreen()
             }
         ) {
-            Text(text = dadu.toString())
+            Text(text = currentDadu.toString())
         }
     }
 }

@@ -8,7 +8,7 @@ import com.ehan.app2.model.Position
 object GameEngine {
     fun createInitialBoard(): Map<Position, Piece> {
         val board = mutableMapOf<Position, Piece>()
-        val pos = Position(0, 0)
+        val pos = Position(7, 0)
         board[pos] = Piece(player = PlayerPiece.PLAYER_1, position = pos)
         return board
     }
@@ -62,9 +62,11 @@ object GameEngine {
         val from: Position = piece.position
         var _to: Position = piece.position
         for (i in 1..length) {
-            _to = _to.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
-            if (_to.isValid() != true) {
-                _to = from.copy(row = from.row + 1)
+            var __to = _to.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
+            if (_to.isValid() == true) {
+                _to = __to
+            } else {
+                _to = _to.copy(row = from.row + 1)
             }
         }
         val to: Position = _to
