@@ -141,7 +141,7 @@ fun greeting(
     val context: Context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val refreshScreenManual: Boolean by rememberSaveable { mutableStateOf(false) }
+    var refreshScreenManual: Boolean by rememberSaveable { mutableStateOf(false) }
 
     val boardBorderColor: Color = Color(0xFF5D4037)
     val lightSquareColor: Color = Color(0xFFF0D9B5)
