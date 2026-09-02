@@ -54,7 +54,26 @@ object GameEngine {
     
         return pieces
     }
-
+/**
+    fun getMove(
+        piece: Piece,
+        length: Int
+    ): Move {
+        val from: Position = piece.position
+        val to: Po
+    }
+    */
+    fun getNextMove(
+        piece: Piece
+    ): Move {
+        val from: Position = piece.position
+        val to: Position = from.copy(row = from.row + 1)
+        return Move(
+            from = from,
+            to = to,
+            player = piece.player
+        )
+    }
 
     data class MoveResult(
         val newBoard: Map<Position, Piece>
