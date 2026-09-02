@@ -43,8 +43,8 @@ object GameEngine {
         val piece = _piece
 
         val updatedPiece = piece.copy(position = move.to)
-        if (newBoard?[move.to] != null && newBoard?[move.to] is List<Piece>) {
-            val pieces = newBoard?[move.to]?.toMutableList()
+        if (newBoard[move.to] != null && newBoard[move.to] is List<Piece>) {
+            val pieces = newBoard[move.to]?.toMutableList()
             if (pieces == null) {
                 newBoard[move.to] = listOf<Piece>(updatedPiece)
             } else {
