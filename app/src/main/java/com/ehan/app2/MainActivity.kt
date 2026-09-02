@@ -262,7 +262,7 @@ fun greeting(
                         val pieces = GameEngine.getPieces(board)
                         val piece: Piece? = pieces[currentPlayer]
                         if (piece != null && piece is Piece) {
-                            val moves: Move = GameEngine.getMove(piece)
+                            val moves: Move = GameEngine.getMove(piece, dadu)
                             if (moves.to.isValid() == true) {
                                 currentDadu = dadu
                                 onRun = true
