@@ -87,18 +87,21 @@ object GameEngine {
             }
             if (_to in board) {
                 val pieces = board[_to]
-                for (_piece in pieces) {
-                    if (piece != _piece) {
-                        if (i in _withPiece) {
-                            val _pieces = _withPiece[i]?.toMutableList()
-                            if (_pieces == null) {
-                                _withPiece[i] = listOf<Piece>(_piece)
+                if (pieces != null && pieces is List<Piece>) {
+                    for (dex in pieces.indices) {
+                        val _piece = pieces[dex]
+                        if (piece != _piece) {
+                            if (i in _withPiece) {
+                                val _pieces = _withPiece[i]?.toMutableList()
+                                if (_pieces == null) {
+                                    _withPiece[i] = listOf<Piece>(_piece)
+                                } else {
+                                    _pieces.add(_piece)
+                                    _withPiece[i] = _pieces
+                                }
                             } else {
-                                _pieces[i].add(_piece)
-                                _withPiece[i] = _pieces
+                                _withPiece[i] = listOf<Piece>(_piece)
                             }
-                        } else {
-                            _withPiece[i] = listOf<Piece>(_piece)
                         }
                     }
                 }

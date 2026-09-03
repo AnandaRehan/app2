@@ -276,8 +276,6 @@ fun greeting(
                             }
                             if (dadus?.isNotEmpty() == true) {
                                 dadu = (dadus.shuffled()).random()
-                            }
-                            if (dadus?.isNotEmpty() == true) {
                                 val moves: Move = GameEngine.getMove(board, piece, dadu)
                                 if (moves.to.isValid() == true) {
                                     currentDadu = dadu
