@@ -263,6 +263,9 @@ fun greeting(
                         val dadus = mutableListOf<Int>()
                         val pieces = GameEngine.getPieces(board)
                         val piece: Piece? = pieces[currentPlayer]
+                        if (piece == null || piece !is Piece) {
+                            return@onClick
+                        }
                         val _move: Move = GameEngine.getMove(board, piece, 6)
                         for (angka in 1..6) {
                             if (_move.withPiece == null) {
