@@ -259,42 +259,38 @@ fun greeting(
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
                 onClick = {
-                    if (onRun == true) {
-                        return@onClick
-                    }
                     if (onRun != true) {
                         val dadus = mutableListOf<Int>()
                         val pieces = GameEngine.getPieces(board)
                         val piece: Piece? = pieces[currentPlayer]
-                        if (piece == null || piece !is Piece) {
-                            return@onClick
-                        }
-                        val _move: Move = GameEngine.getMove(board, piece, 6)
-                        for (angka in 1..6) {
-                            if (_move.withPiece == null) {
-                                dadus.add(angka)
-                            } else {
-                                if (angka !in _move.withPiece) {
+                        if (piece != null && piece is Piece) {
+                            val _move: Move = GameEngine.getMove(board, piece, 6)
+                            for (angka in 1..6) {
+                                if (_move.withPiece == null) {
                                     dadus.add(angka)
+                                } else {
+                                    if (angka !in _move.withPiece) {
+                                        dadus.add(angka)
+                                    }
                                 }
                             }
-                        }
-                        if (dadus?.isNotEmpty() == true) {
-                            dadu = (dadus.shuffled()).random()
-                        }
-                        if (dadus?.isNotEmpty() == true && piece != null && piece is Piece) {
-                            val moves: Move = GameEngine.getMove(board, piece, dadu)
-                            if (moves.to.isValid() == true) {
-                                currentDadu = dadu
-                                onRun = true
-                                finishRun = false
+                            if (dadus?.isNotEmpty() == true) {
+                                dadu = (dadus.shuffled()).random()
+                            }
+                            if (dadus?.isNotEmpty() == true) {
+                                val moves: Move = GameEngine.getMove(board, piece, dadu)
+                                if (moves.to.isValid() == true) {
+                                    currentDadu = dadu
+                                    onRun = true
+                                    finishRun = false
+                                } else {
+                                    dadu = 0
+                                    currentPlayer = currentPlayer.opponent()
+                                }
                             } else {
                                 dadu = 0
                                 currentPlayer = currentPlayer.opponent()
                             }
-                        } else {
-                            dadu = 0
-                            currentPlayer = currentPlayer.opponent()
                         }
                     }
                     refreshScreen()
