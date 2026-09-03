@@ -238,7 +238,7 @@ fun greeting(
                     showMessage(currentPlayer.displayName)
                     showMessage(pieces.toString())
                 } else {
-                    val nextMove: Move = GameEngine.getNextMove(piece)
+                    val nextMove: Move = GameEngine.getNextMove(board, piece)
                     if (nextMove.to.isValid() != true) {
                         dadu = 0
                         finishRun = true
@@ -263,7 +263,7 @@ fun greeting(
                         val dadus = mutableListOf<Int>()
                         val pieces = GameEngine.getPieces(board)
                         val piece: Piece? = pieces[currentPlayer]
-                        val _move: Move = GameEngine.getMove(piece, 6)
+                        val _move: Move = GameEngine.getMove(board, piece, 6)
                         for (angka in 1..6) {
                             if (_move.withPiece == null) {
                                 dadus.add(angka)
@@ -277,7 +277,7 @@ fun greeting(
                             dadu = (dadus.shuffled()).random()
                         }
                         if (dadus?.isNotEmpty() == true && piece != null && piece is Piece) {
-                            val moves: Move = GameEngine.getMove(piece, dadu)
+                            val moves: Move = GameEngine.getMove(board, piece, dadu)
                             if (moves.to.isValid() == true) {
                                 currentDadu = dadu
                                 onRun = true
