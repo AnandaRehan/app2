@@ -274,6 +274,9 @@ fun greeting(
                                     }
                                 }
                             }
+                            if (_move.withPiece != null) {
+                                showMessage(_move.withPiece.toString())
+                            }
                             if (dadus?.isNotEmpty() == true) {
                                 dadu = (dadus.shuffled()).random()
                                 val moves: Move = GameEngine.getMove(board, piece, dadu)

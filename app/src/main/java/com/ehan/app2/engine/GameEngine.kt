@@ -87,10 +87,10 @@ object GameEngine {
             }
             if (_to in board) {
                 val pieces = board[_to]
-                if (pieces != null && pieces is List<Piece>) {
+                if (pieces != null) {
                     for (dex in pieces.indices) {
                         val _piece = pieces[dex]
-                        if (piece != _piece) {
+                        if (piece.player != _piece.player) {
                             if (i in _withPiece) {
                                 val _pieces = _withPiece[i]?.toMutableList()
                                 if (_pieces == null) {
