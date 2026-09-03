@@ -232,7 +232,12 @@ fun greeting(
                 dadu--
                 val pieces = GameEngine.getPieces(board)
                 val piece: Piece? = pieces[currentPlayer]
-                if (piece != null && piece is Piece) {
+                if (piece == null) {
+                    dadu = 0
+                    finishRun = true
+                    showMessage(currentPlayer.displayName)
+                    showMessage(pieces.toString())
+                } else {
                     val nextMove: Move = GameEngine.getNextMove(piece)
                     if (nextMove.to.isValid() != true) {
                         dadu = 0
@@ -241,9 +246,6 @@ fun greeting(
                     } else {
                         handleMove(nextMove)
                     }
-                } else {
-                    dadu = 0
-                    finishRun = true
                 }
             } else {
                 finishRun = true
@@ -258,10 +260,23 @@ fun greeting(
             Button(
                 onClick = {
                     if (onRun != true) {
-                        dadu = Random.nextInt(1, 7)
+                        val dadus = mutableListOf<Int>()
                         val pieces = GameEngine.getPieces(board)
                         val piece: Piece? = pieces[currentPlayer]
-                        if (piece != null && piece is Piece) {
+                        val _move: Move = GameEngine.getMove(piece, 6)
+                        for (angka in 1..6) {
+                            if (_move.withPiece == null) {
+                                dadus.add(angka)
+                            } else {
+                                if (angka !in _move.withPiece) {
+                                    dadus.add(angka)
+                                }
+                            }
+                        }
+                        if (dadus?.isNotEmpty() == true) {
+                            dadu = (dadus.shuffled()).random()
+                        }
+                        if (dadus?.isNotEmpty() == true && piece != null && piece is Piece) {
                             val moves: Move = GameEngine.getMove(piece, dadu)
                             if (moves.to.isValid() == true) {
                                 currentDadu = dadu

@@ -34,5 +34,6 @@ data class Piece(
 data class Move(
     val from: Position,
     val to: Position,
-    val player: PlayerPiece
+    val player: PlayerPiece,
+    val withPiece: Map<Int, List<Piece>>? = null
 ) : Parcelable

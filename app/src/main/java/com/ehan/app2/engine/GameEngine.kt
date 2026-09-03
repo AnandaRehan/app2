@@ -25,12 +25,10 @@ object GameEngine {
         val pieces = board[move.from]?.toMutableList() ?: return MoveResult(board)
 
         var _piece: Piece? = null
-        var i: Int = 0
         if (pieces != null && pieces is List<Piece>) {
-            cariPiece@ for (index in pieces.indices) {
+            cariPiece@ for (i in pieces.indices) {
                 val piece = pieces[i]
                 if (piece.player == move.player) {
-                    i = index
                     _piece = pieces.removeAt(i)
                     break@cariPiece
                 }
@@ -73,11 +71,13 @@ object GameEngine {
     }
 
     fun getMove(
+        board: Map<Position, List<Piece>>,
         piece: Piece,
         length: Int
     ): Move {
         val from: Position = piece.position
         var _to: Position = piece.position
+        var _withPiece: Map<Int, List<Piece>> = mutableMapOf<Int, List<Piece>>()
         for (i in 1..length) {
             var __to = _to.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
             if (__to.isValid() == true) {
@@ -85,15 +85,35 @@ object GameEngine {
             } else {
                 _to = _to.copy(row = _to.row + 1)
             }
+            if (_to in board) {
+                val pieces = board[_to]
+                for (_piece in pieces) {
+                    if (piece != _piece) {
+                        if (i in _withPiece) {
+                            val _pieces = _withPiece[i]?.toMutableList()
+                            if (_pieces == null) {
+                                _withPiece[i] = listOf<Piece>(_piece)
+                            } else {
+                                _pieces[i].add(_piece)
+                                _withPiece[i] = _pieces
+                            }
+                        } else {
+                            _withPiece[i] = listOf<Piece>(_piece)
+                        }
+                    }
+                }
+            }
         }
         val to: Position = _to
-        return Move(from = from, to = to, player = piece.player)
+        val withPiece: Map<Int, List<Piece>>? = if (_withPiece.isNullOrEmpty()) { null } else { _withPiece }
+        return Move(from = from, to = to, player = piece.player, withPiece = withPiece)
     }
 
     fun getNextMove(
+        board: Map<Position, List<Piece>>,
         piece: Piece
     ): Move {
-        return getMove(piece, 1)
+        return getMove(board, piece, 1)
     }
 
     data class MoveResult(
