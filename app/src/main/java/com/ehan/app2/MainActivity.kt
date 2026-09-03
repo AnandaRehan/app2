@@ -259,6 +259,9 @@ fun greeting(
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
                 onClick = {
+                    if (onRun == true) {
+                        return@onClick
+                    }
                     if (onRun != true) {
                         val dadus = mutableListOf<Int>()
                         val pieces = GameEngine.getPieces(board)
