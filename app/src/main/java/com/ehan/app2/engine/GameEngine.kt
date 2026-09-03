@@ -77,7 +77,7 @@ object GameEngine {
     ): Move {
         val from: Position = piece.position
         var _to: Position = piece.position
-        var _withPiece: = mutableMapOf<Int, List<Piece>>()
+        var _withPiece = mutableMapOf<Int, List<Piece>>()
         for (i in 1..length) {
             var __to = _to.copy(col = if (from.row % 2 == 0) { from.col - 1 } else { from.col + 1 })
             if (__to.isValid() == true) {
